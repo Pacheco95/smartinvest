@@ -2,7 +2,7 @@ import * as echarts from 'echarts'
 import { EChartOption, ECharts } from 'echarts'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
-import getSelicTaxHistory from '../../services/get-selic-history'
+import getSelicTaxHistory from '../services/get-selic-history'
 
 const option: EChartOption = {
   tooltip: {
@@ -64,7 +64,7 @@ const SelicChart = () => {
           })
         setSelicData(newData)
       })
-  }, [chart])
+  }, [])
 
   useEffect(() => {
     if (selicData && chart) {
@@ -81,7 +81,7 @@ const SelicChart = () => {
     setChart(selicChart)
 
     fetchSelicData()
-  }, [])
+  }, [fetchSelicData])
 
   return <div id="main" style={{ width: 800, height: 600 }} />
 }

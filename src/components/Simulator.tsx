@@ -1,9 +1,10 @@
 import { Button, Checkbox, Col, DatePicker, Form, InputNumber, Row } from 'antd'
 import { Moment } from 'moment'
-import React from 'react'
+import React, { useState } from 'react'
 import { Period, PeriodRangePicker } from './PeriodInput'
 import { calculateIncome, convertTax } from '../business/tax-converter'
 import { Duration } from 'luxon'
+import SimulationReport from './SimulationReport'
 
 interface FormValues {
   beginAt: Moment
@@ -11,7 +12,7 @@ interface FormValues {
   value: number
   tax: number
   period: Period
-  ir?: boolean
+  calculateIr?: boolean
 }
 
 function calculateIR(days: number) {
@@ -61,15 +62,19 @@ function calculateFinalValue({
   }
 }
 
+export interface Simulation extends FormValues, FinalValue {}
+
 const Simulator = () => {
+  const [simulations, setSimulations] = useState<Simulation[]>([])
   const [form] = Form.useForm<FormValues>()
 
   const commonRules = [{ required: true, message: 'Campo obrigatório!' }]
 
   const submitForm = () => {
     form.validateFields().then((values) => {
-      const { ir, liquid } = calculateFinalValue(values)
-      console.log({ ir, liquid })
+      const finalValue = calculateFinalValue(values)
+      const simulation = { ...values, ...finalValue }
+      setSimulations((prevSimulations) => [...prevSimulations, simulation])
     })
   }
 
@@ -78,68 +83,86 @@ const Simulator = () => {
   }
 
   return (
-    <Form layout="vertical" form={form} preserve={false}>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item rules={commonRules} name="beginAt" label="Data de início">
-            <DatePicker className="w-full" format="DD/MM/YYYY" />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            rules={commonRules}
-            name="endAt"
-            label="Data de vencimento"
-          >
-            <DatePicker className="w-full" format="DD/MM/YYYY" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            rules={commonRules}
-            name="value"
-            label="Valor a ser investido"
-          >
-            <InputNumber style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col span={7}>
-          <Form.Item rules={commonRules} name="tax" label="Taxa (%)">
-            <InputNumber style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col span={5}>
-          <Form.Item rules={commonRules} name="period" label="Período">
-            <PeriodRangePicker style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col>
-          <Form.Item
-            name="ir"
-            label="Calcular imposto de renda?"
-            valuePropName="checked"
-          >
-            <Checkbox />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col>
-          <Button type="dashed" onClick={resetFormValues}>
-            Limpar
-          </Button>
-        </Col>
-        <Col>
-          <Button type="primary" onClick={submitForm}>
-            Calcular
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+    <div>
+      <Form layout="vertical" form={form} preserve={false}>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              rules={commonRules}
+              name="beginAt"
+              label="Data de início"
+            >
+              <DatePicker className="w-full" format="DD/MM/YYYY" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              rules={commonRules}
+              name="endAt"
+              label="Data de vencimento"
+            >
+              <DatePicker className="w-full" format="DD/MM/YYYY" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              rules={commonRules}
+              name="value"
+              label="Valor a ser investido"
+            >
+              <InputNumber style={{ width: '100%' }} addonAfter="R$" />
+            </Form.Item>
+          </Col>
+          <Col span={7}>
+            <Form.Item
+              rules={commonRules}
+              name="tax"
+              label="Taxa"
+              tooltip="Use o conversor de taxas acima para converter uma determinada taxa para a sua equivalente em outro período"
+            >
+              <InputNumber style={{ width: '100%' }} addonAfter="%" />
+            </Form.Item>
+          </Col>
+          <Col span={5}>
+            <Form.Item rules={commonRules} name="period" label="Período">
+              <PeriodRangePicker style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col>
+            <Form.Item
+              name="calculateIr"
+              label="Calcular imposto de renda?"
+              valuePropName="checked"
+            >
+              <Checkbox />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col>
+            <Button type="dashed" onClick={resetFormValues}>
+              Limpar
+            </Button>
+          </Col>
+          <Col>
+            <Button type="primary" onClick={submitForm}>
+              Calcular
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+      <ul>
+        {simulations.map((simulation, index) => (
+          <li key={index} className="my-4">
+            <SimulationReport simulation={simulation} />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
