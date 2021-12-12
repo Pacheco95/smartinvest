@@ -1,10 +1,23 @@
-import { Button, Checkbox, Col, DatePicker, Form, InputNumber, Row } from 'antd'
+import {
+  Button,
+  Checkbox,
+  Col,
+  Collapse,
+  DatePicker,
+  Form,
+  InputNumber,
+  Row
+} from 'antd'
 import { Moment } from 'moment'
 import React, { useState } from 'react'
 import { Period, PeriodRangePicker } from './PeriodInput'
 import { calculateIncome, convertTax } from '../business/tax-converter'
 import { Duration } from 'luxon'
 import SimulationReport from './SimulationReport'
+import { formatCurrency } from '../utils'
+import { v4 as uuidv4 } from 'uuid'
+
+const { Panel } = Collapse
 
 interface FormValues {
   beginAt: Moment
@@ -62,7 +75,9 @@ function calculateFinalValue({
   }
 }
 
-export interface Simulation extends FormValues, FinalValue {}
+export interface Simulation extends FormValues, FinalValue {
+  id: string
+}
 
 const Simulator = () => {
   const [simulations, setSimulations] = useState<Simulation[]>([])
@@ -73,13 +88,14 @@ const Simulator = () => {
   const submitForm = () => {
     form.validateFields().then((values) => {
       const finalValue = calculateFinalValue(values)
-      const simulation = { ...values, ...finalValue }
-      setSimulations((prevSimulations) => [...prevSimulations, simulation])
+      const simulation = { ...values, ...finalValue, id: uuidv4() }
+      setSimulations((prevSimulations) => [simulation, ...prevSimulations])
     })
   }
 
   const resetFormValues = () => {
     form.resetFields()
+    setSimulations([])
   }
 
   return (
@@ -155,13 +171,18 @@ const Simulator = () => {
           </Col>
         </Row>
       </Form>
-      <ul>
-        {simulations.map((simulation, index) => (
-          <li key={index} className="my-4">
-            <SimulationReport simulation={simulation} />
-          </li>
-        ))}
-      </ul>
+      {!!simulations.length && (
+        <Collapse className="!mt-4">
+          {simulations.map((simulation) => (
+            <Panel
+              key={simulation.id}
+              header={formatCurrency(simulation.liquid)}
+            >
+              <SimulationReport simulation={simulation} />
+            </Panel>
+          ))}
+        </Collapse>
+      )}
     </div>
   )
 }

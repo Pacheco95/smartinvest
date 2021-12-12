@@ -1,32 +1,24 @@
 import { Simulation } from './Simulator'
-import { Moment } from 'moment'
+import { formatCurrency, formatDate, formatPercentage } from '../utils'
+import { Period } from './PeriodInput'
 
 interface SimulationReportProps {
   simulation: Simulation
 }
 
-function formatDate(date: Moment) {
-  return date.format('DD/MM/YYYY')
-}
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat('pt-BR', {
-    currency: 'BRL',
-    style: 'currency'
-  }).format(value)
-}
-
-function formatPercentage(value: number) {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'percent',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(value)
-}
-
 interface EntryProps {
   label: string
   value: string | number
+}
+
+type PeriodTranslationMap = {
+  [key in Period]: string
+}
+
+const translationMap: PeriodTranslationMap = {
+  days: 'dia',
+  months: 'mês',
+  years: 'ano'
 }
 
 const Entry = ({ label, value }: EntryProps) => {
@@ -45,7 +37,7 @@ const SimulationReport = ({ simulation }: SimulationReportProps) => {
       <Entry label="Valor investido" value={formatCurrency(value)} />
       <Entry
         label="Taxa"
-        value={`${formatPercentage(tax / 100)} ao ${period}`}
+        value={`${formatPercentage(tax / 100)} ao ${translationMap[period]}`}
       />
       <Entry
         label="Período da aplicação"
