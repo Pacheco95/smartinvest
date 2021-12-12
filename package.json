@@ -17,7 +17,8 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "jest",
-    "lint": "eslint src --max-warnings=0"
+    "lint": "eslint src --max-warnings=0",
+    "preview": "vite preview --port 8080"
   },
   "dependencies": {
     "antd": "^4.17.3",

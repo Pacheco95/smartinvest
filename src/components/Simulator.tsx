@@ -166,7 +166,7 @@ const Simulator = () => {
           </Col>
           <Col>
             <Button type="primary" onClick={submitForm}>
-              Calcular
+              Simular
             </Button>
           </Col>
         </Row>
