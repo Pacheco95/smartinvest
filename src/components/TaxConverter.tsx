@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Form } from 'antd'
 import { SwapOutlined } from '@ant-design/icons'
 import { Duration } from 'luxon'
 import PeriodInput, { Period, PeriodInputValue } from './PeriodInput'
@@ -98,43 +98,50 @@ const TaxConverter = () => {
   }
 
   return (
-    <Form layout="vertical" initialValues={initialFormValues}>
-      <Row gutter={16} className="justify-center">
-        <Col>
-          <Form.Item label="Período atual">
-            <PeriodInput
-              value={{
-                value: lhsTax,
-                period: lhsPeriod
-              }}
-              onChange={handleCurrentTaxPeriodChange}
-              inputNumberProps={{ style: { width: 200 } }}
-            />
-          </Form.Item>
-        </Col>
-        <Col className="my-auto mx-1">
-          <Button
-            size="large"
-            type="link"
-            icon={
-              <SwapOutlined className="text-3xl text-blue-700 cursor-pointer" />
-            }
-            onClick={swapTaxes}
+    <Form
+      layout="vertical"
+      initialValues={initialFormValues}
+      className="md:flex gap-x-4 justify-center content-center"
+    >
+      <div className="flex justify-center items-center">
+        <Form.Item label="Período atual">
+          <PeriodInput
+            value={{
+              value: lhsTax,
+              period: lhsPeriod
+            }}
+            onChange={handleCurrentTaxPeriodChange}
+            inputNumberProps={{ style: { width: 200 } }}
           />
-        </Col>
-        <Col>
-          <Form.Item label="Período desejado">
-            <PeriodInput
-              value={{
-                value: rhsTax,
-                period: rhsPeriod
-              }}
-              onChange={handleDesiredTaxPeriodChange}
-              inputNumberProps={{ style: { width: 200 }, disabled: true }}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
+        </Form.Item>
+      </div>
+      <div className="flex md:flex-col justify-center mb-2 md:mb-0">
+        <Button
+          size="large"
+          type="link"
+          icon={
+            <SwapOutlined className="text-3xl text-blue-700 cursor-pointer" />
+          }
+          onClick={swapTaxes}
+        />
+      </div>
+      <div className="flex justify-center items-center">
+        <Form.Item
+          label="Período desejado"
+          wrapperCol={{
+            xs: 24
+          }}
+        >
+          <PeriodInput
+            value={{
+              value: rhsTax,
+              period: rhsPeriod
+            }}
+            onChange={handleDesiredTaxPeriodChange}
+            inputNumberProps={{ style: { width: 200 }, disabled: true }}
+          />
+        </Form.Item>
+      </div>
     </Form>
   )
 }
