@@ -67,7 +67,7 @@ function calculateFinalValue({
 
   const irTax = calculateIR(days) / 100
 
-  const ir = income * irTax
+  const ir = (income - value) * irTax
 
   return {
     liquid: income,
