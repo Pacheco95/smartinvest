@@ -103,15 +103,15 @@ const TaxConverter = () => {
       initialValues={initialFormValues}
       className="md:flex gap-x-4 justify-center content-center"
     >
-      <div className="flex justify-center items-center">
-        <Form.Item label="Período atual">
+      <div className="flex justify-center items-center w-full">
+        <Form.Item label="Período atual" className="w-full">
           <PeriodInput
             value={{
               value: lhsTax,
               period: lhsPeriod
             }}
             onChange={handleCurrentTaxPeriodChange}
-            inputNumberProps={{ style: { width: 200 } }}
+            inputNumberProps={{ style: { width: '100%' } }}
           />
         </Form.Item>
       </div>
@@ -125,12 +125,13 @@ const TaxConverter = () => {
           onClick={swapTaxes}
         />
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center w-full">
         <Form.Item
           label="Período desejado"
           wrapperCol={{
             xs: 24
           }}
+          className="w-full"
         >
           <PeriodInput
             value={{
@@ -138,7 +139,7 @@ const TaxConverter = () => {
               period: rhsPeriod
             }}
             onChange={handleDesiredTaxPeriodChange}
-            inputNumberProps={{ style: { width: 200 }, disabled: true }}
+            inputNumberProps={{ style: { width: '100%' }, disabled: true }}
           />
         </Form.Item>
       </div>
