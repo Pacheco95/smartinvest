@@ -1,6 +1,7 @@
 import { Simulation } from './Simulator'
 import { formatCurrency, formatDate, formatPercentage } from '../utils'
 import { Period } from './PeriodInput'
+import { ReactNode } from 'react'
 
 interface SimulationReportProps {
   simulation: Simulation
@@ -8,7 +9,7 @@ interface SimulationReportProps {
 
 interface EntryProps {
   label: string
-  value: string | number
+  value: string | number | ReactNode
 }
 
 type PeriodTranslationMap = {
@@ -39,12 +40,14 @@ const SimulationReport = ({ simulation }: SimulationReportProps) => {
         label="Taxa"
         value={`${formatPercentage(tax / 100)} ao ${translationMap[period]}`}
       />
-      <Entry
-        label="Período da aplicação"
-        value={`de ${formatDate(beginAt)} até ${formatDate(endAt)}`}
-      />
+      <Entry label="Data da aplicação" value={formatDate(beginAt)} />
+      <Entry label="Vencimento" value={formatDate(endAt)} />
       <Entry label="Rendimento líquido" value={formatCurrency(liquid)} />
       <Entry label="Imposto de renda" value={formatCurrency(ir)} />
+      <Entry
+        label="Valor final líquido"
+        value={formatCurrency(liquid + value)}
+      />
     </div>
   )
 }

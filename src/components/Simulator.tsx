@@ -70,7 +70,7 @@ function calculateFinalValue({
   const ir = (income - value) * irTax
 
   return {
-    liquid: income,
+    liquid: income - value,
     ir
   }
 }
@@ -176,7 +176,7 @@ const Simulator = () => {
           {simulations.map((simulation) => (
             <Panel
               key={simulation.id}
-              header={formatCurrency(simulation.liquid)}
+              header={formatCurrency(simulation.liquid + simulation.value)}
             >
               <SimulationReport simulation={simulation} />
             </Panel>
