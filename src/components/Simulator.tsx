@@ -40,7 +40,7 @@ function calculateIR(days: number) {
 
 interface FinalValue {
   liquid: number
-  ir: number
+  ir?: number
 }
 
 function calculateFinalValue({
@@ -48,7 +48,8 @@ function calculateFinalValue({
   value,
   tax,
   beginAt,
-  endAt
+  endAt,
+  calculateIr
 }: FormValues): FinalValue {
   const days = endAt.diff(beginAt, 'days')
   const oneDay = Duration.fromObject({ days: 1 })
@@ -67,7 +68,7 @@ function calculateFinalValue({
 
   const irTax = calculateIR(days) / 100
 
-  const ir = (income - value) * irTax
+  const ir = calculateIr ? (income - value) * irTax : undefined
 
   return {
     liquid: income - value,

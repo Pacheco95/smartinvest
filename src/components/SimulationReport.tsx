@@ -42,10 +42,14 @@ const SimulationReport = ({ simulation }: SimulationReportProps) => {
       />
       <Entry label="Data da aplicação" value={formatDate(beginAt)} />
       <Entry label="Vencimento" value={formatDate(endAt)} />
-      <Entry label="Rendimento líquido" value={formatCurrency(liquid)} />
-      <Entry label="Imposto de renda" value={formatCurrency(ir)} />
+      {ir !== undefined && (
+        <>
+          <Entry label="Rendimento líquido" value={formatCurrency(liquid)} />
+          <Entry label="Imposto de renda" value={formatCurrency(ir)} />
+        </>
+      )}
       <Entry
-        label="Valor final líquido"
+        label={`Valor final${ir !== undefined ? ' líquido' : ''}`}
         value={formatCurrency(liquid + value)}
       />
     </div>
