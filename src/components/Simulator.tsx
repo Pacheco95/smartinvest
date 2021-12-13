@@ -95,6 +95,9 @@ const Simulator = () => {
 
   const resetFormValues = () => {
     form.resetFields()
+  }
+
+  const clearSimulations = () => {
     setSimulations([])
   }
 
@@ -169,9 +172,17 @@ const Simulator = () => {
         <Row gutter={16}>
           <Col>
             <Button type="dashed" onClick={resetFormValues}>
-              Limpar
+              Limpar formulário
             </Button>
           </Col>
+          {!!simulations.length && (
+            <Col>
+              <Button type="dashed" onClick={clearSimulations}>
+                Limpar simulações
+              </Button>
+            </Col>
+          )}
+          <Col className="flex-1" />
           <Col>
             <Button type="primary" onClick={submitForm}>
               Simular
