@@ -128,7 +128,11 @@ const Simulator = () => {
               name="value"
               label="Valor a ser investido"
             >
-              <InputNumber style={{ width: '100%' }} addonAfter="R$" />
+              <InputNumber
+                decimalSeparator=","
+                style={{ width: '100%' }}
+                addonAfter="R$"
+              />
             </Form.Item>
           </Col>
           <Col span={7}>
@@ -138,7 +142,11 @@ const Simulator = () => {
               label="Taxa"
               tooltip="Use o conversor de taxas acima para converter uma determinada taxa para a sua equivalente em outro período"
             >
-              <InputNumber style={{ width: '100%' }} addonAfter="%" />
+              <InputNumber
+                decimalSeparator=","
+                style={{ width: '100%' }}
+                addonAfter="%"
+              />
             </Form.Item>
           </Col>
           <Col span={5}>

@@ -65,6 +65,7 @@ const PeriodInput = ({
       addonAfter={currentTaxPeriodPicker}
       style={{ width: '100%' }}
       {...inputNumberProps}
+      decimalSeparator=","
     />
   )
 }
