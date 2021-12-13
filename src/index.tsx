@@ -5,6 +5,8 @@ import App from './App'
 
 import 'antd/dist/antd.css'
 import ptBR from 'antd/lib/locale/pt_BR'
+import './global.scss'
+
 import { ConfigProvider } from 'antd'
 
 render(

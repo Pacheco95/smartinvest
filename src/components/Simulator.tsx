@@ -6,6 +6,7 @@ import {
   DatePicker,
   Form,
   InputNumber,
+  message,
   Row
 } from 'antd'
 import { Moment } from 'moment'
@@ -16,6 +17,8 @@ import { Duration } from 'luxon'
 import SimulationReport from './SimulationReport'
 import { formatCurrency } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
+
+import * as _ from 'lodash'
 
 const { Panel } = Collapse
 
@@ -90,6 +93,15 @@ const Simulator = () => {
     form.validateFields().then((values) => {
       const finalValue = calculateFinalValue(values)
       const simulation = { ...values, ...finalValue, id: uuidv4() }
+      const lasSimulation = simulations.at(-1)
+      const wasPreviousCalculated = _.isEqual(
+        _.omit(lasSimulation, 'id'),
+        _.omit(simulation, 'id')
+      )
+      if (wasPreviousCalculated) {
+        void message.info('Sem alterações desde a sua última simulação')
+        return
+      }
       setSimulations((prevSimulations) => [simulation, ...prevSimulations])
     })
   }
