@@ -120,7 +120,7 @@ const TaxConverter = () => {
           size="large"
           type="link"
           icon={
-            <SwapOutlined className="text-3xl text-blue-700 cursor-pointer" />
+            <SwapOutlined className="text-3xl text-blue-700 rotate-90 md:rotate-0 cursor-pointer" />
           }
           onClick={swapTaxes}
         />
