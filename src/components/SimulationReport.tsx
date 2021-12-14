@@ -32,25 +32,51 @@ const Entry = ({ label, value }: EntryProps) => {
 }
 
 const SimulationReport = ({ simulation }: SimulationReportProps) => {
-  const { ir, period, value, endAt, tax, liquid, beginAt } = simulation
+  const {
+    ir,
+    period,
+    endAt,
+    tax,
+    beginAt,
+    calculateIr,
+    liquidTotal,
+    liquidIncome,
+    finalBruteValue,
+    investedValue,
+    irTaxPercentage
+  } = simulation
+
+  const irValue = ir ?? 0
+
   return (
     <div>
-      <Entry label="Valor investido" value={formatCurrency(value)} />
+      <Entry label="Valor investido" value={formatCurrency(investedValue)} />
       <Entry
         label="Taxa"
         value={`${formatPercentage(tax / 100)} ao ${translationMap[period]}`}
       />
       <Entry label="Data da aplicação" value={formatDate(beginAt)} />
       <Entry label="Vencimento" value={formatDate(endAt)} />
-      {ir !== undefined && (
+      {calculateIr && (
         <>
-          <Entry label="Rendimento líquido" value={formatCurrency(liquid)} />
-          <Entry label="Imposto de renda" value={formatCurrency(ir)} />
+          <Entry
+            label="Rendimento líquido"
+            value={formatCurrency(liquidIncome)}
+          />
+          <Entry
+            label="Taxa do imposto de renda"
+            value={formatPercentage(irTaxPercentage)}
+          />
+          <Entry label="Imposto de renda" value={formatCurrency(irValue)} />
+          <Entry
+            label={`Valor final bruto`}
+            value={formatCurrency(finalBruteValue)}
+          />
         </>
       )}
       <Entry
         label={`Valor final${ir !== undefined ? ' líquido' : ''}`}
-        value={formatCurrency(liquid + value)}
+        value={formatCurrency(liquidTotal)}
       />
     </div>
   )

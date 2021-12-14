@@ -24,12 +24,13 @@ interface FormValues {
   beginAt: Moment
   endAt: Moment
   value: number
+  pmt: number
   tax: number
   period: Period
   calculateIr?: boolean
 }
 
-function calculateIR(days: number) {
+function calculateIrTax(days: number) {
   if (days > 720) return 15.0
 
   if (days >= 361) return 17.5
@@ -40,41 +41,70 @@ function calculateIR(days: number) {
 }
 
 interface FinalValue {
-  liquid: number
+  liquidTotal: number
+  liquidIncome: number
   ir?: number
+  investedValue: number
+  finalBruteValue: number
+  irTaxPercentage: number
 }
 
 function calculateFinalValue({
   period,
   value,
+  pmt,
   tax,
   beginAt,
   endAt,
   calculateIr
 }: FormValues): FinalValue {
-  const days = endAt.diff(beginAt, 'days')
-  const oneDay = Duration.fromObject({ days: 1 })
+  const investedMonths = endAt.diff(beginAt, 'months')
+  const oneMonth = Duration.fromObject({ months: 1 })
 
   const taxPercentage = tax / 100
 
-  const taxPerDay = convertTax(
-    taxPercentage,
-    Duration.fromObject({
-      [period]: 1
-    }),
-    oneDay
+  const currentTaxPeriod = Duration.fromObject({ [period]: 1 })
+
+  const taxPerMonth = convertTax(taxPercentage, currentTaxPeriod, oneMonth)
+
+  const finalBruteValue = calculateIncome(
+    value,
+    taxPerMonth,
+    investedMonths,
+    pmt
   )
 
-  const income = calculateIncome(value, taxPerDay, days)
+  let ir: number | undefined = undefined
 
-  const irTax = calculateIR(days) / 100
+  let irTaxPercentage = 0
 
-  const ir = calculateIr ? (income - value) * irTax : undefined
+  let liquidTotal = finalBruteValue
+
+  const investedValue = value + pmt * investedMonths
+
+  const liquidIncome = finalBruteValue - investedValue
+
+  const bruteGain = finalBruteValue - investedValue
+
+  if (calculateIr) {
+    const investedDays = endAt.diff(beginAt, 'days')
+    irTaxPercentage = calculateIrTax(investedDays) / 100
+    ir = irTaxPercentage * bruteGain
+    liquidTotal = finalBruteValue - ir
+  }
 
   return {
-    liquid: income - value,
-    ir
+    liquidTotal,
+    liquidIncome,
+    ir,
+    investedValue,
+    finalBruteValue,
+    irTaxPercentage
   }
+}
+
+const initialFormValues: Partial<FormValues> = {
+  pmt: 0
 }
 
 export interface Simulation extends FormValues, FinalValue {
@@ -114,7 +144,12 @@ const Simulator = () => {
 
   return (
     <div>
-      <Form layout="vertical" form={form} preserve={false}>
+      <Form
+        layout="vertical"
+        form={form}
+        preserve={false}
+        initialValues={initialFormValues}
+      >
         <div className="sm:flex gap-x-4 w-full">
           <Form.Item
             rules={commonRules}
@@ -137,7 +172,19 @@ const Simulator = () => {
           <Form.Item
             rules={commonRules}
             name="value"
-            label="Valor a ser investido"
+            label="Valor inicial a ser investido"
+            className="w-full"
+          >
+            <InputNumber
+              decimalSeparator=","
+              style={{ width: '100%' }}
+              addonAfter="R$"
+            />
+          </Form.Item>
+          <Form.Item
+            rules={commonRules}
+            name="pmt"
+            label="Valor dos aportes mensais"
             className="w-full"
           >
             <InputNumber
@@ -156,6 +203,7 @@ const Simulator = () => {
             className="!block w-3/5"
           >
             <InputNumber
+              min={0}
               decimalSeparator=","
               style={{ width: '100%' }}
               addonAfter="%"
@@ -193,7 +241,7 @@ const Simulator = () => {
           {simulations.map((simulation) => (
             <Panel
               key={simulation.id}
-              header={formatCurrency(simulation.liquid + simulation.value)}
+              header={formatCurrency(simulation.liquidTotal)}
             >
               <SimulationReport simulation={simulation} />
             </Panel>

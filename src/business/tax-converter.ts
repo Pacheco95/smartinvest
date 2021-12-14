@@ -14,8 +14,21 @@ export const convertTax = (
 export const calculateIncome = (
   initialCapital: BigNum,
   tax: BigNum,
-  period: BigNum
-) => initialCapital * (1 + tax) ** period
+  period: BigNum,
+  pmt: BigNum
+) => {
+  const power = (1 + tax) ** period
+
+  let pmtSum: number
+
+  if (tax > 0) {
+    pmtSum = (pmt * (1 + tax) * (power - 1)) / tax
+  } else {
+    pmtSum = pmt * period
+  }
+
+  return initialCapital * power + pmtSum
+}
 
 export interface TimeBasedTax {
   tax: BigNum
@@ -25,7 +38,8 @@ export interface TimeBasedTax {
 export const calculateIncomeTimeBased = (
   initialCapital: BigNum,
   timeBasedTax: TimeBasedTax,
-  howMuchTime: Duration
+  howMuchTime: Duration,
+  pmt: BigNum
 ) => {
   const equivalentTaxValueOneDay = convertTax(
     timeBasedTax.tax,
@@ -36,7 +50,8 @@ export const calculateIncomeTimeBased = (
   return calculateIncome(
     initialCapital,
     equivalentTaxValueOneDay,
-    howMuchTime.as('days')
+    howMuchTime.as('days'),
+    pmt
   )
 }
 
