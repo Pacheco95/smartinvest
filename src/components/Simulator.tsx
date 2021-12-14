@@ -1,13 +1,11 @@
 import {
   Button,
   Checkbox,
-  Col,
   Collapse,
   DatePicker,
   Form,
   InputNumber,
-  message,
-  Row
+  message
 } from 'antd'
 import { Moment } from 'moment'
 import React, { useState } from 'react'
@@ -117,91 +115,78 @@ const Simulator = () => {
   return (
     <div>
       <Form layout="vertical" form={form} preserve={false}>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              rules={commonRules}
-              name="beginAt"
-              label="Data de início"
-            >
-              <DatePicker className="w-full" format="DD/MM/YYYY" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              rules={commonRules}
-              name="endAt"
-              label="Data de vencimento"
-            >
-              <DatePicker className="w-full" format="DD/MM/YYYY" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              rules={commonRules}
-              name="value"
-              label="Valor a ser investido"
-            >
-              <InputNumber
-                decimalSeparator=","
-                style={{ width: '100%' }}
-                addonAfter="R$"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item
-              rules={commonRules}
-              name="tax"
-              label="Taxa"
-              tooltip="Use o conversor de taxas acima para converter uma determinada taxa para a sua equivalente em outro período"
-            >
-              <InputNumber
-                decimalSeparator=","
-                style={{ width: '100%' }}
-                addonAfter="%"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={5}>
-            <Form.Item rules={commonRules} name="period" label="Período">
-              <PeriodRangePicker style={{ width: '100%' }} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col>
-            <Form.Item
-              name="calculateIr"
-              label="Calcular imposto de renda?"
-              valuePropName="checked"
-            >
-              <Checkbox />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col>
-            <Button type="dashed" onClick={resetFormValues}>
-              Limpar formulário
-            </Button>
-          </Col>
+        <div className="sm:flex gap-x-4 w-full">
+          <Form.Item
+            rules={commonRules}
+            name="beginAt"
+            label="Data de início"
+            className="w-full"
+          >
+            <DatePicker className="w-full" format="DD/MM/YYYY" />
+          </Form.Item>
+          <Form.Item
+            rules={commonRules}
+            name="endAt"
+            label="Data de vencimento"
+            className="w-full"
+          >
+            <DatePicker className="w-full" format="DD/MM/YYYY" />
+          </Form.Item>
+        </div>
+        <div className="sm:flex gap-x-4 w-full">
+          <Form.Item
+            rules={commonRules}
+            name="value"
+            label="Valor a ser investido"
+            className="w-full"
+          >
+            <InputNumber
+              decimalSeparator=","
+              style={{ width: '100%' }}
+              addonAfter="R$"
+            />
+          </Form.Item>
+        </div>
+        <div className="flex gap-x-4 w-full">
+          <Form.Item
+            rules={commonRules}
+            name="tax"
+            label="Taxa"
+            tooltip="Use o conversor de taxas acima para converter uma determinada taxa para a sua equivalente em outro período"
+            className="!block w-3/5"
+          >
+            <InputNumber
+              decimalSeparator=","
+              style={{ width: '100%' }}
+              addonAfter="%"
+            />
+          </Form.Item>
+          <Form.Item
+            rules={commonRules}
+            name="period"
+            label="Período"
+            className="!block w-2/5"
+          >
+            <PeriodRangePicker style={{ width: '100%' }} />
+          </Form.Item>
+        </div>
+        <Form.Item name="calculateIr" valuePropName="checked">
+          <Checkbox>Calcular imposto de renda?</Checkbox>
+        </Form.Item>
+        <div className="flex gap-x-4">
+          <Button type="dashed" onClick={resetFormValues}>
+            Limpar formulário
+          </Button>
           {!!simulations.length && (
-            <Col>
-              <Button type="dashed" onClick={clearSimulations}>
-                Limpar simulações
-              </Button>
-            </Col>
-          )}
-          <Col className="flex-1" />
-          <Col>
-            <Button type="primary" onClick={submitForm}>
-              Simular
+            <Button type="dashed" onClick={clearSimulations}>
+              Limpar simulações
             </Button>
-          </Col>
-        </Row>
+          )}
+          <div className="flex-1" />
+          <Button type="primary" onClick={submitForm}>
+            Simular
+          </Button>
+        </div>
       </Form>
       {!!simulations.length && (
         <Collapse className="!mt-4">

@@ -111,7 +111,7 @@ const TaxConverter = () => {
               period: lhsPeriod
             }}
             onChange={handleCurrentTaxPeriodChange}
-            inputNumberProps={{ style: { width: '100%' } }}
+            inputNumberProps={{ style: { width: '100%' }, min: 0 }}
           />
         </Form.Item>
       </div>
