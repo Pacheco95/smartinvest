@@ -17,6 +17,7 @@ import { formatCurrency } from '../utils'
 import { v4 as uuidv4 } from 'uuid'
 
 import * as _ from 'lodash'
+import { CalculatorFilled, ClearOutlined } from '@ant-design/icons'
 
 const { Panel } = Collapse
 
@@ -224,17 +225,31 @@ const Simulator = () => {
         <Form.Item name="calculateIr" valuePropName="checked">
           <Checkbox>Calcular imposto de renda?</Checkbox>
         </Form.Item>
-        <div className="flex gap-x-4">
-          <Button type="dashed" onClick={resetFormValues}>
+        <div className="flex flex-col lg:flex-row gap-1">
+          <Button
+            type="dashed"
+            onClick={resetFormValues}
+            className="uppercase"
+            icon={<ClearOutlined />}
+          >
             Limpar formulário
           </Button>
-          {!!simulations.length && (
-            <Button type="dashed" onClick={clearSimulations}>
-              Limpar simulações
-            </Button>
-          )}
-          <div className="flex-1" />
-          <Button type="primary" onClick={submitForm}>
+          <Button
+            type="dashed"
+            onClick={clearSimulations}
+            className="uppercase"
+            disabled={!!simulations}
+            icon={<ClearOutlined />}
+          >
+            Limpar simulações
+          </Button>
+          <div className="hidden lg:flex flex-1" />
+          <Button
+            type="primary"
+            onClick={submitForm}
+            className="uppercase"
+            icon={<CalculatorFilled />}
+          >
             Simular
           </Button>
         </div>
