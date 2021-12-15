@@ -104,7 +104,8 @@ function calculateFinalValue({
 }
 
 const initialFormValues: Partial<FormValues> = {
-  pmt: 0
+  pmt: 0,
+  calculateIr: true
 }
 
 export interface Simulation extends FormValues, FinalValue {
