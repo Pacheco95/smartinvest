@@ -7,7 +7,13 @@ import 'antd/dist/antd.css'
 import ptBR from 'antd/lib/locale/pt_BR'
 import './global.scss'
 
+import ReactGa from 'react-ga'
+
 import { ConfigProvider } from 'antd'
+
+ReactGa.initialize('G-CG7TTCQJK1', {
+  debug: import.meta.env.DEV
+})
 
 render(
   <StrictMode>
