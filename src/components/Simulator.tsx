@@ -201,7 +201,7 @@ const Simulator = () => {
             name="tax"
             label="Taxa"
             tooltip="Use o conversor de taxas acima para converter uma determinada taxa para a sua equivalente em outro período"
-            className="!block w-3/5"
+            className="!block w-1/2 sm:w-1/4"
           >
             <InputNumber
               min={0}
@@ -214,10 +214,12 @@ const Simulator = () => {
             rules={commonRules}
             name="period"
             label="Período"
-            className="!block w-2/5"
+            className="!block w-1/2 sm:w-1/4"
           >
             <PeriodRangePicker style={{ width: '100%' }} />
           </Form.Item>
+          <div className="hidden sm:flex sm:w-1/4" />
+          <div className="hidden sm:flex sm:w-1/4" />
         </div>
         <Form.Item name="calculateIr" valuePropName="checked">
           <Checkbox>Calcular imposto de renda?</Checkbox>
