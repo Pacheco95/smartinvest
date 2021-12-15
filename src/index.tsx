@@ -10,7 +10,7 @@ import App from './App'
 
 import { ConfigProvider } from 'antd'
 
-ReactGA.initialize('G-CG7TTCQJK1', {
+ReactGA.initialize('G-5QGJ9KXD58', {
   debug: import.meta.env.DEV
 })
 
