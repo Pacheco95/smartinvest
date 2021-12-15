@@ -238,7 +238,7 @@ const Simulator = () => {
             type="dashed"
             onClick={clearSimulations}
             className="uppercase"
-            disabled={!!simulations}
+            disabled={simulations.length == 0}
             icon={<ClearOutlined />}
           >
             Limpar simulações
