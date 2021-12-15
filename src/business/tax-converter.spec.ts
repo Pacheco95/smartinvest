@@ -33,8 +33,8 @@ describe('Tax converter', () => {
 
     const taxPerDay = convertTax(taxPerYear, oneYearPeriod, oneDayPeriod)
 
-    const fv1 = calculateIncome(initialCapital, taxPerYear, fiveYears)
-    const fv2 = calculateIncome(initialCapital, taxPerDay, fiveYearsInDays)
+    const fv1 = calculateIncome(initialCapital, taxPerYear, fiveYears, 0)
+    const fv2 = calculateIncome(initialCapital, taxPerDay, fiveYearsInDays, 0)
 
     const diff = Math.abs(fv1 - fv2)
 
@@ -50,13 +50,15 @@ describe('Tax converter', () => {
     const fv1 = calculateIncomeTimeBased(
       initialCapital,
       { tax: taxPerYear, timeInterval: oneYearPeriod },
-      fiveYearsPeriod
+      fiveYearsPeriod,
+      0
     )
 
     const fv2 = calculateIncomeTimeBased(
       initialCapital,
       { tax: taxPerDay, timeInterval: oneDayPeriod },
-      fiveYearsPeriod
+      fiveYearsPeriod,
+      0
     )
 
     const diff = Math.abs(fv1 - fv2)
