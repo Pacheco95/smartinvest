@@ -59,7 +59,7 @@ function calculateFinalValue({
   endAt,
   calculateIr
 }: FormValues): FinalValue {
-  const investedMonths = endAt.diff(beginAt, 'months')
+  const investedMonths = endAt.diff(beginAt, 'days') / 30
   const oneMonth = Duration.fromObject({ months: 1 })
 
   const taxPercentage = tax / 100
