@@ -1,10 +1,10 @@
 import { HomePage } from './pages/HomePage'
 import { useEffect } from 'react'
-import ReactGa from 'react-ga'
+import ReactGA from 'react-ga'
 
 function App() {
   useEffect(() => {
-    ReactGa.pageview(window.location.pathname)
+    ReactGA.pageview(window.location.pathname + window.location.search)
   }, [])
 
   return <HomePage />

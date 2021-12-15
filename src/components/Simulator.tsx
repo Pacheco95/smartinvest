@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import * as _ from 'lodash'
 import { CalculatorFilled, ClearOutlined } from '@ant-design/icons'
+import ReactGa from 'react-ga'
 
 const { Panel } = Collapse
 
@@ -119,21 +120,35 @@ const Simulator = () => {
 
   const commonRules = [{ required: true, message: 'Campo obrigatório!' }]
 
-  const submitForm = () => {
-    form.validateFields().then((values) => {
-      const finalValue = calculateFinalValue(values)
-      const simulation = { ...values, ...finalValue, id: uuidv4() }
-      const lasSimulation = simulations.at(-1)
-      const wasPreviousCalculated = _.isEqual(
-        _.omit(lasSimulation, 'id'),
-        _.omit(simulation, 'id')
-      )
-      if (wasPreviousCalculated) {
-        void message.info('Sem alterações desde a sua última simulação')
-        return
-      }
-      setSimulations((prevSimulations) => [simulation, ...prevSimulations])
+  const fireGaEvent = () => {
+    ReactGa.event({
+      category: 'SIMULATION',
+      action: 'SIMULATE_BUTTON_CLICK'
     })
+  }
+
+  const submitForm = () => {
+    fireGaEvent()
+
+    form
+      .validateFields()
+      .then((values) => {
+        const finalValue = calculateFinalValue(values)
+        const simulation = { ...values, ...finalValue, id: uuidv4() }
+        const lasSimulation = simulations.at(-1)
+        const wasPreviousCalculated = _.isEqual(
+          _.omit(lasSimulation, 'id'),
+          _.omit(simulation, 'id')
+        )
+        if (wasPreviousCalculated) {
+          void message.info('Sem alterações desde a sua última simulação')
+          return
+        }
+        setSimulations((prevSimulations) => [simulation, ...prevSimulations])
+      })
+      .catch(() => {
+        void message.error('Há campos obrigatórios não preenchidos')
+      })
   }
 
   const resetFormValues = () => {
