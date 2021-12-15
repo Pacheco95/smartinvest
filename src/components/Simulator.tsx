@@ -240,7 +240,7 @@ const Simulator = () => {
         <Form.Item name="calculateIr" valuePropName="checked">
           <Checkbox>Calcular imposto de renda?</Checkbox>
         </Form.Item>
-        <div className="flex flex-col lg:flex-row gap-1">
+        <div className="flex flex-col lg:flex-row gap-1 lg:gap-4">
           <Button
             type="dashed"
             onClick={resetFormValues}
