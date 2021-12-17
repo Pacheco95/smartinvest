@@ -24,7 +24,7 @@ type PeriodRangePickerProps = SelectProps<Period>
 
 export const PeriodRangePicker = (props: PeriodRangePickerProps) => (
   <Select
-    style={{ width: 70 }}
+    style={{ width: 90 }}
     allowClear
     showSearch
     optionFilterProp="children"
@@ -32,7 +32,7 @@ export const PeriodRangePicker = (props: PeriodRangePickerProps) => (
   >
     {ranges.map((range) => (
       <Option key={range.duration} value={range.duration}>
-        {range.name}
+        % {range.name}
       </Option>
     ))}
   </Select>

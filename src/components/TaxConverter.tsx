@@ -57,7 +57,7 @@ const TaxConverter = () => {
 
     setLhsPeriod(rhsPeriod)
     setRhsPeriod(lhsPeriod)
-  }, [shouldSwapValues])
+  }, [lhsPeriod, lhsTax, rhsPeriod, rhsTax, shouldSwapValues])
 
   const swapTaxes = () => {
     setShouldSwapValues(true)
@@ -104,7 +104,7 @@ const TaxConverter = () => {
       className="md:flex gap-x-4 justify-center content-center"
     >
       <div className="flex justify-center items-center w-full">
-        <Form.Item label="Período atual" className="w-full">
+        <Form.Item label="Taxa atual" className="w-full">
           <PeriodInput
             value={{
               value: lhsTax,
@@ -127,7 +127,7 @@ const TaxConverter = () => {
       </div>
       <div className="flex justify-center items-center w-full">
         <Form.Item
-          label="Período desejado"
+          label="Taxa equivalente"
           wrapperCol={{
             xs: 24
           }}
